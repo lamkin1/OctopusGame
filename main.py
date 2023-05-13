@@ -29,7 +29,7 @@ def main():
     screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
     pygame.display.set_caption('My Game')
 
-    # background = Background(screen)
+    background = Background(screen)
     octopus = Octopus(screen)
 
     running = True
@@ -41,8 +41,8 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-        # draw the background and octopus on the screen
-        # background.draw(screen)
+        #draw the background and octopus on the screen
+        background.draw(screen)
         octopus.draw(screen)
 
         pygame.display.flip()
