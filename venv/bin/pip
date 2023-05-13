@@ -1,4 +1,4 @@
-#!/Users/aidan/Desktop/pygame/octopusgame/venv/bin/python
+#!/Users/aidan/Desktop/github/OctopusGame/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
