@@ -68,10 +68,6 @@ class Enemy(pygame.sprite.Sprite):
 
         # If the enemy has been hit by all colors
         if len(self.hit_colors) >= len(bullet_colors):
-            # If this is the first time the enemy turns black
-
-
-            # If more than one second has passed since the enemy turned black
             self.kill()
 
     def draw(self, screen):
