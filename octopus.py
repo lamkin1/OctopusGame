@@ -118,10 +118,3 @@ class Octopus(pygame.sprite.Sprite):
     def sethascell(self):
         self.hasCell = True
 
-    def flipSkin(self):
-        if self.hasCell:
-            self.image = pygame.image.load('octopus_cell.png').convert_alpha()
-            self.hasCell = False
-        else:
-            self.image = pygame.image.load('octopus.png').convert_alpha()
-            self.hasCell = True

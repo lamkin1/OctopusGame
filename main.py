@@ -8,7 +8,9 @@ screen_width = 1920
 screen_height = 1080
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("My Game")
-
+pygame.mixer.init()
+shoot_sound = pygame.mixer.Sound('inkshoot.wav')
+propel_sound = pygame.mixer.Sound('propel_sound.wav')
 def main():
     pygame.init()
 
