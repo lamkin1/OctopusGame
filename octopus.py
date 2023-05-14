@@ -43,8 +43,8 @@ class Octopus(pygame.sprite.Sprite):
         print(length)
         self.moveSpeed = self.maxMoveSpeed if length > 200 else (length / 200) * self.maxMoveSpeed
 
-        movement_x = math.sin(self.angle * (0.0174533)) * self.moveSpeed
-        movement_y = math.cos(self.angle * (0.0174533)) * self.moveSpeed * (-1)
+        movement_x = math.sin(self.angle * 0.0174533) * self.moveSpeed
+        movement_y = math.cos(self.angle * 0.0174533) * self.moveSpeed * (-1)
 
         self.movey += movement_y
         self.movex += movement_x
@@ -60,9 +60,21 @@ class Octopus(pygame.sprite.Sprite):
         self.movex *= deceleration if abs(self.movex) > .7 else 1
         self.movey *= deceleration if abs(self.movey) > .7 else 1
 
-        #print(self.movex)
-
         self.rect.centerx += self.movex
-        #print(self.rect.centerx)
         self.rect.centery += self.movey
+
+        # Screen dimensions
+        screen_width = 1920
+        screen_height = 1080
+
+        # If the octopus crosses the screen boundaries, make it appear on the opposite side
+        if self.rect.right < 0:
+            self.rect.left = screen_width
+        elif self.rect.left > screen_width:
+            self.rect.right = 0
+        if self.rect.bottom < 0:
+            self.rect.top = screen_height
+        elif self.rect.top > screen_height:
+            self.rect.bottom = 0
+
 
