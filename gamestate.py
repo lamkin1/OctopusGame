@@ -115,6 +115,7 @@ class GameState:
             # update the game state
             mouse_pos = pygame.mouse.get_pos()
             bullet_group.update()
+            enemy_group.update(self.octopus.rect.center, bullet_group)
 
             self.octopus.update(mouse_pos)
             for bullet in bullet_group.sprites():
