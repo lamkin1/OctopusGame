@@ -20,8 +20,8 @@ class Octopus(pygame.sprite.Sprite):
         self.movey = 0
         self.frame = 0
         self.angle = 0
-        self.maxMoveSpeed = 2
-        self.moveSpeed = 1
+        self.maxMoveSpeed = 1.2
+        self.moveSpeed = 1.2
         self.ink_cooldown = 0
         # set octopus position to center of screen
         self.rect.center = screen.get_rect().center
@@ -57,8 +57,8 @@ class Octopus(pygame.sprite.Sprite):
         movement_x = math.sin(self.angle * 0.0174533) * self.moveSpeed
         movement_y = math.cos(self.angle * 0.0174533) * self.moveSpeed * (-1)
 
-        self.movey += movement_y
-        self.movex += movement_x
+        self.movey += movement_y if abs(self.movey) < 1 else 0
+        self.movex += movement_x if abs(self.movex) < 1 else 0
         # print(f'movex: {self.movex} movey: {self.movey}')
         self.update(mouse_pos)
 
@@ -67,9 +67,10 @@ class Octopus(pygame.sprite.Sprite):
 
         self.angle = 90 + math.degrees(math.atan2(dy, dx))
 
-        deceleration = .995
-        self.movex *= deceleration if abs(self.movex) > .7 else 1
-        self.movey *= deceleration if abs(self.movey) > .7 else 1
+        deceleration = .90
+        self.movex *= deceleration if abs(self.movex) > .6 else 1
+        self.movey *= deceleration if abs(self.movey) > .6 else 1
+        print(self.movex)
 
         self.rect.centerx += self.movex
         self.rect.centery += self.movey
@@ -95,6 +96,8 @@ class Octopus(pygame.sprite.Sprite):
 
         for ink in self.all_sprites:
             ink.update()
+
+
 
 
     def shoot_ink(self):

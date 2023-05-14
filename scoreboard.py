@@ -7,8 +7,8 @@ class ScoreBoard:
         self.score = 0
         self.font = pygame.font.Font(None, 36)  # choose the font and size
 
-    def increment_score(self):
-        self.score += 1
+    def increment_score(self, add):
+        self.score += 1 + add
 
     def draw(self, screen):
         score_text = "Score: " + str(self.score)
