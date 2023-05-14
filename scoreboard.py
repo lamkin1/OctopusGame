@@ -10,6 +10,9 @@ class ScoreBoard:
     def increment_score(self, add):
         self.score += 1 + add
 
+    def reset(self):
+        self.score = 0
+
     def draw(self, screen):
         score_text = "Score: " + str(self.score)
         text = self.font.render(score_text, True, (255, 255, 255))  # the color is white

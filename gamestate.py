@@ -100,7 +100,11 @@ class GameState:
     def endgame(self, screen):
         mouse_pos = pygame.mouse.get_pos()
         level_background = background.Background(screen, "EndgameBackground.png")
+        play_game_button = playgamebutton.PlayGameButton(screen)
+        self.image = pygame.transform.scale(play_game_button.image, (int(play_game_button.image.get_width() * 0.08), int(play_game_button.image.get_height() * 0.08)))
+        self.rect = self.image.get_rect(center=(900, 900))
         bullet_group = pygame.sprite.Group()
+        font = pygame.font.Font(None, 36)
 
         check = True
         while check:
@@ -117,6 +121,14 @@ class GameState:
                         propel_sound.play()
                         # print('Move')
                 elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if play_game_button.clicked(pygame.mouse.get_pos()):
+                        self.octopus.reset(screen)
+                        self.state = 'main_game'
+                        self.main_game(screen)
+                        scoreboard.reset()
+                        check = False
+                        break
+                        print("Starting the game...")
 
                     # Get the direction vector between the mouse position and the player position
                     dx, dy = event.pos[0] - self.octopus.rect.centerx, event.pos[1] - self.octopus.rect.centery
@@ -147,11 +159,16 @@ class GameState:
                     bullet_group.add(shots)
 
             # draw the background and octopus and portal on the screen            mouse_pos = pygame.mouse.get_pos()
+
             mouse_pos = pygame.mouse.get_pos()
             self.octopus.update(mouse_pos)
             screen.fill((0, 0, 0))
             level_background.draw(screen)
             self.octopus.draw(screen)
+            play_game_button.rect = self.rect = self.image.get_rect(center=(860, 900))
+            play_game_button.draw(screen)
+            score_text = font.render(f"Score: {scoreboard.score}", True, (255, 255, 255))
+            screen.blit(score_text, (900, 770))  # Adjust the position as needed
             bullet_group.update()
 
             for bullet in bullet_group.sprites():
@@ -253,9 +270,6 @@ class GameState:
             scoreboard.draw(screen)
 
             pygame.display.flip()
-
-    def end_game(self, screen):
-        level_background = background.Background(screen, "titleBackground.png")
 
     def state_manager(self, screen):
         if self.state == 'intro':
