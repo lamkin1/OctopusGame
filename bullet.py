@@ -1,16 +1,20 @@
 import pygame
 
 
+
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, position, direction, speed, player_rect):
+    def __init__(self, position, direction, speed, player_rect, color):
         super().__init__()
         # initialized with a starting position, direction, and speed
-        self.image = pygame.Surface((10, 10))
-        self.image.fill((255, 0, 0))
+        self.color = color  # store the color for later reference
+        self.image = pygame.Surface((10, 10), pygame.SRCALPHA)  # we're creating a bigger Surface to accommodate the circle
+        pygame.draw.circle(self.image, self.color, (5, 5), 5)
         self.rect = self.image.get_rect(center=position)
         self.direction = direction
         self.speed = speed
         self.player_rect = player_rect
+
+
 
     # moves the bullet in its direction at the given speed, checks if the bullet has gone off the screen
     def update(self):

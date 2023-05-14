@@ -7,6 +7,12 @@ import portal
 from octopus import Octopus
 from bullet import Bullet
 
+class GameState:
+    def __init__(self):
+        self.state = 'intro'
+        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+        self.level_backgrounds = ["raccoon.png", "starterBackground.png"]
+        self.bullet_group = pygame.sprite.Group()
 
 class GameState:
     def __init__(self, octopus):
@@ -45,6 +51,14 @@ class GameState:
                     # Create a new bullet and add it to the group
                     shots = Bullet(self.octopus.rect.center, direction, 10, self.octopus.rect)
                     # print(
+                    # Cycle to the next color
+                    color = next(self.color_iter, None)
+                    if color is None:  # If we've reached the end of the list, reset the iterator
+                        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+                        color = next(self.color_iter)
+
+                    shots = Bullet(octopus.rect.center, direction, 10, octopus.rect, color)
+                    #print(
                     #    f"Bullet position: {shots.rect.center}, direction: {shots.direction}, speed: {shots.speed}")
 
                     bullet_group.add(shots)
@@ -72,9 +86,8 @@ class GameState:
         enemy = Enemy.Enemy(self.octopus.rect.center)
         #enemy.draw(screen)
         enemy_group = enemy.spawn_enemies(10, self.octopus.rect.center)
-        check = True
 
-        while check:
+        while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -104,6 +117,18 @@ class GameState:
             for bullet in bullet_group.sprites():
                 print(f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
 
+                color = next(self.color_iter, None)
+                if color is None:  # If we've reached the end of the list, reset the iterator
+                    self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+                    color = next(self.color_iter)
+
+                # Create a new bullet with the current color and add it to the group
+                bullet = Bullet(self.octopus.rect.center, direction, 10, self.octopus.rect, color)
+                bullet_group.add(bullet)
+
+            # update the game state
+            mouse_pos = pygame.mouse.get_pos()
+            self.octopus.update(mouse_pos)
             bullet_group.update()
 
             # draw the game objects on the screen
