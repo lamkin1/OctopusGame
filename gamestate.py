@@ -21,9 +21,10 @@ class GameState:
 
     def intro(self, screen):
         mouse_pos = pygame.mouse.get_pos()
-        level_background = background.Background(screen, "titleBackground.jpeg")
+        level_background = background.Background(screen, "titleBackground.png")
         play_game_button = playgamebutton.PlayGameButton(screen)
         bullet_group = pygame.sprite.Group()
+
         check = True
         while check:
             for event in pygame.event.get():
@@ -34,8 +35,8 @@ class GameState:
                         pygame.quit()
                     if event.key == pygame.K_LEFT or event.key == ord(' '):
                         self.octopus.control(mouse_pos)
-                        octopus.control(mouse_pos)
-                        octopus.shoot_ink()
+                        self.octopus.control(mouse_pos)
+                        self.octopus.shoot_ink()
                         # print('Move')
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if play_game_button.clicked(pygame.mouse.get_pos()):
@@ -71,14 +72,14 @@ class GameState:
 
             if not check:
                 break
-            # draw the background and octopus and portal on the screen
-            mouse_pos = pygame.mouse.get_pos()
+            # draw the background and octopus and portal on the screen            mouse_pos = pygame.mouse.get_pos()
             self.octopus.update(mouse_pos)
             screen.fill((0, 0, 0))
             level_background.draw(screen)
             self.octopus.draw(screen)
             play_game_button.draw(screen)
             bullet_group.update()
+
             for bullet in bullet_group.sprites():
                 print(f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
 
