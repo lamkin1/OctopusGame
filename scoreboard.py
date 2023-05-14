@@ -1,3 +1,7 @@
+import pygame
+pygame.font.init()
+
+
 class ScoreBoard:
     def __init__(self):
         self.score = 0

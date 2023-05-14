@@ -1,7 +1,7 @@
 import pygame
 import gamestate
 import octopus
-
+import scoreboard
 animation = 4
 
 screen_width = 1920
