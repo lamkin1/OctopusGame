@@ -85,7 +85,7 @@ class Enemy(pygame.sprite.Sprite):
                 return x, y
 
     def is_far_from_player(self, player_position, enemy_position):
-        min_distance = 100  # Minimum distance between player and enemy
+        min_distance = 500  # Minimum distance between player and enemy
         return pygame.math.Vector2(enemy_position).distance_to(player_position) >= min_distance
 
 

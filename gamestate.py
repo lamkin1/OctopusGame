@@ -73,6 +73,7 @@ class GameState:
             if not check:
                 break
             # draw the background and octopus and portal on the screen            mouse_pos = pygame.mouse.get_pos()
+            mouse_pos = pygame.mouse.get_pos()
             self.octopus.update(mouse_pos)
             screen.fill((0, 0, 0))
             level_background.draw(screen)
@@ -88,16 +89,16 @@ class GameState:
 
     def main_game(self, screen):
         level_background = background.Background(screen, "starterBackground.png")
-        first_portal = portal.Portal(screen)
+        # first_portal = portal.Portal(screen)
         bullet_group = pygame.sprite.Group()
         enemy = Enemy.Enemy(self.octopus.rect.center)
         enemy_group = enemy.spawn_enemies(10, self.octopus.rect.center)
         # Create sprite group
-        energy_cells = pygame.sprite.Group()
-        # Create EnergyCell instance
-        cell = EnergyCell(500, 500)
-        # Add EnergyCell instance to sprite group
-        energy_cells.add(cell)
+        # energy_cells = pygame.sprite.Group()
+        # # Create EnergyCell instance
+        # cell = EnergyCell(500, 500)
+        # # Add EnergyCell instance to sprite group
+        # energy_cells.add(cell)
 
         while True:
             for event in pygame.event.get():
@@ -146,51 +147,16 @@ class GameState:
             enemy_group.draw(screen)
             scoreboard.draw(screen)
 
-            energy_cells.update(self.octopus, energy_cells)
-            energy_cells.draw(screen)
-
-            collisions = pygame.sprite.spritecollide(self.octopus, energy_cells, True)
-            if collisions:
-                print("COLLIDING COLLIDING")
-                self.octopus.sethascell()
-                self.octopus.flipSkin()
-
-            first_portal.draw(screen)
+            # energy_cells.update(self.octopus, energy_cells)
+            # energy_cells.draw(screen)
+            #
+            # collisions = pygame.sprite.spritecollide(self.octopus, energy_cells, True)
+            # if collisions:
+            #     self.octopus.sethascell()
+            #     self.octopus.flipSkin()
+            #
+            # first_portal.draw(screen)
             pygame.display.flip()
-
-    # def main_game(self, screen, octopus):
-    #     mouse_pos = pygame.mouse.get_pos()
-    #     level_background = background.Background(screen, "starterBackground.png")
-    #     first_portal = portal.Portal(screen)
-    #     bullet_group = pygame.sprite.Group()
-    #
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             pygame.quit()
-    #         elif event.type == pygame.KEYDOWN:
-    #             if event.key == pygame.K_ESCAPE:
-    #                 pygame.quit()
-    #             if event.key == pygame.K_LEFT or event.key == ord(' '):
-    #                 octopus.control(mouse_pos)
-    #                 # print('Move')
-    #         elif event.type == pygame.MOUSEBUTTONDOWN:
-    #             # Get the direction vector between the mouse position and the player position
-    #             dx, dy = event.pos[0] - octopus.rect.centerx, event.pos[1] - octopus.rect.centery
-    #             direction = pygame.Vector2(dx, dy).normalize()
-    #             # Create a new bullet and add it to the group
-    #             shots = bullet.Bullet(octopus.rect.center, direction, 10, octopus.rect)
-    #             bullet_group.add(shots)
-    #
-    #     # draw the background and octopus and portal on the screen
-    #     mouse_pos = pygame.mouse.get_pos()
-    #     octopus.update(mouse_pos)
-    #     screen.fill((0, 0, 0))
-    #     level_background.draw(screen)
-    #     octopus.draw(screen)
-    #     bullet_group.update()
-    #     bullet_group.draw(screen)
-    #     first_portal.draw(screen)
-    #     pygame.display.flip()
 
     def state_manager(self, screen):
         if self.state == 'intro':
