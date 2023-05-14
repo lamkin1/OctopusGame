@@ -12,18 +12,21 @@ from energycell import EnergyCell
 
 scoreboard = scoreboard.ScoreBoard()
 
+
 class GameState:
     def __init__(self, octopus):
-        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+        self.color_iter = iter(
+            [(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
         self.state = 'intro'
         self.octopus = octopus
         self.bullet_group = pygame.sprite.Group()
 
     def intro(self, screen):
         mouse_pos = pygame.mouse.get_pos()
-        level_background = background.Background(screen, "titleBackground.jpeg")
+        level_background = background.Background(screen, "titleBackground.png")
         play_game_button = playgamebutton.PlayGameButton(screen)
         bullet_group = pygame.sprite.Group()
+
         check = True
         while check:
             for event in pygame.event.get():
@@ -46,46 +49,53 @@ class GameState:
                         print("Starting the game...")
 
                     # Get the direction vector between the mouse position and the player position
-                    dx, dy = event.pos[0] - self.octopus.rect.centerx, event.pos[1] - self.octopus.rect.centery
+                    dx, dy = event.pos[0] - self.octopus.rect.centerx, event.pos[1] - \
+                        self.octopus.rect.centery
                     direction = pygame.Vector2(dx, dy).normalize()
 
                     color = next(self.color_iter, None)
                     if color is None:  # If we've reached the end of the list, reset the iterator
-                        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+                        self.color_iter = iter(
+                            [(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
                         color = next(self.color_iter)
                     # Create a new bullet and add it to the group
-                    shots = Bullet(self.octopus.rect.center, direction, 10, self.octopus.rect, color)
+                    shots = Bullet(self.octopus.rect.center,
+                                   direction, 10, self.octopus.rect, color)
                     # print(
                     # Cycle to the next color
                     color = next(self.color_iter, None)
                     if color is None:  # If we've reached the end of the list, reset the iterator
-                        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+                        self.color_iter = iter(
+                            [(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
                         color = next(self.color_iter)
 
-                    shots = Bullet(self.octopus.rect.center, direction, 10, self.octopus.rect, color)
-                    #print(
+                    shots = Bullet(self.octopus.rect.center,
+                                   direction, 10, self.octopus.rect, color)
+                    # print(
                     #    f"Bullet position: {shots.rect.center}, direction: {shots.direction}, speed: {shots.speed}")
 
                     bullet_group.add(shots)
 
             if not check:
                 break
-            # draw the background and octopus and portal on the screen
-            mouse_pos = pygame.mouse.get_pos()
+            # draw the background and octopus and portal on the screen            mouse_pos = pygame.mouse.get_pos()
             self.octopus.update(mouse_pos)
             screen.fill((0, 0, 0))
             level_background.draw(screen)
             self.octopus.draw(screen)
             play_game_button.draw(screen)
             bullet_group.update()
+
             for bullet in bullet_group.sprites():
-                print(f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
+                print(
+                    f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
 
             bullet_group.draw(screen)
             pygame.display.flip()
 
     def main_game(self, screen):
-        level_background = background.Background(screen, "starterBackground.png")
+        level_background = background.Background(
+            screen, "starterBackground.png")
         first_portal = portal.Portal(screen)
         bullet_group = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
@@ -118,14 +128,17 @@ class GameState:
                         self.octopus.shoot_ink()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # Get the direction vector between the mouse position and the player position
-                    dx, dy = event.pos[0] - self.octopus.rect.centerx, event.pos[1] - self.octopus.rect.centery
+                    dx, dy = event.pos[0] - self.octopus.rect.centerx, event.pos[1] - \
+                        self.octopus.rect.centery
                     direction = pygame.Vector2(dx, dy).normalize()
                     # Create a new bullet and add it to the group
                     color = next(self.color_iter, None)
                     if color is None:  # If we've reached the end of the list, reset the iterator
-                        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+                        self.color_iter = iter(
+                            [(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
                         color = next(self.color_iter)
-                    shots = Bullet(self.octopus.rect.center, direction, 10, self.octopus.rect, color)
+                    shots = Bullet(self.octopus.rect.center,
+                                   direction, 10, self.octopus.rect, color)
                     bullet_group.add(shots)
                     for bullet in bullet_group.sprites():
                         print(
@@ -136,7 +149,8 @@ class GameState:
             bullet_group.update()
             self.spawn_timer += 10
             if self.enemy_spawn_delay - self.spawn_timer < 1000:
-                enemy_group = enemy.spawn_enemies(self.spawn_rate, self.octopus.rect.center)
+                enemy_group = enemy.spawn_enemies(
+                    self.spawn_rate, self.octopus.rect.center)
                 for enemy in enemy_group:
                     enemies.add(enemy)
                 self.spawn_timer = 0
@@ -148,7 +162,8 @@ class GameState:
             self.octopus.update(mouse_pos)
 
             for bullet in bullet_group.sprites():
-                print(f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
+                print(
+                    f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
 
             # draw the game objects on the screen
             screen.fill((0, 0, 0))
@@ -160,8 +175,10 @@ class GameState:
             scoreboard.increment_score(0)
             energy_cells.update(self.octopus, energy_cells)
             energy_cells.draw(screen)
-            deathcollisions = pygame.sprite.spritecollide(self.octopus, enemies, True)
-            collisions = pygame.sprite.spritecollide(self.octopus, energy_cells, True)
+            deathcollisions = pygame.sprite.spritecollide(
+                self.octopus, enemies, True)
+            collisions = pygame.sprite.spritecollide(
+                self.octopus, energy_cells, True)
             if deathcollisions:
                 break
             if collisions:
