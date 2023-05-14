@@ -1,9 +1,15 @@
 import pygame
 import math
 
+from energycell import EnergyCell
+from ink import Ink
+
+
 class Octopus(pygame.sprite.Sprite):
     def __init__(self, screen):
         pygame.sprite.Sprite.__init__(self)
+        self.ink_sprites = pygame.sprite.Group()
+        self.all_sprites = pygame.sprite.Group()
         self.image_orig = pygame.image.load("octopus.png").convert_alpha()
         # load octopus image and get its rect
         self.image = pygame.image.load('octopus.png').convert_alpha()
@@ -17,8 +23,12 @@ class Octopus(pygame.sprite.Sprite):
         self.maxMoveSpeed = 2
         self.moveSpeed = 2
 
+        self.maxMoveSpeed = 5
+        self.moveSpeed = 5
+        self.ink_cooldown = 0
         # set octopus position to center of screen
         self.rect.center = screen.get_rect().center
+        self.hasCell = False
 
     def getPosition(self):
         return self.rect
@@ -33,6 +43,9 @@ class Octopus(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.image_orig, -self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
         screen.blit(self.image, self.rect)
+
+        for ink in self.all_sprites:
+            ink.draw(screen)
 
     def control(self, mouse_pos):
         dx, dy = mouse_pos[0] - self.rect.centerx, mouse_pos[1] - self.rect.centery
@@ -78,3 +91,39 @@ class Octopus(pygame.sprite.Sprite):
             self.rect.bottom = 0
 
 
+        self.rect.centerx += self.movex
+        # print(self.rect.centerx)
+        self.rect.centery += self.movey
+
+        for ink in self.all_sprites:
+            ink.update()
+
+
+    def shoot_ink(self):
+
+        # Create 5 ink particles at slightly different positions
+        ink_sprites = pygame.sprite.Group()
+        for i in range(10):
+            x_offset = math.cos(math.radians(i * 72)) * 20
+            y_offset = math.sin(math.radians(i * 72)) * 20
+            position = (self.rect.centerx + x_offset, self.rect.centery + y_offset)
+            angle = 180 + self.angle + (i - 2) * 10
+            ink = Ink(position, angle)
+            ink_sprites.add(ink)
+
+
+        # Add ink particles to the global sprite group
+        self.all_sprites.add(ink_sprites)
+        # set ink cooldown
+        self.ink_cooldown = 30
+
+    def sethascell(self):
+        self.hasCell = True
+
+    def flipSkin(self):
+        if self.hasCell:
+            self.image = pygame.image.load('octopus_cell.png').convert_alpha()
+            self.hasCell = False
+        else:
+            self.image = pygame.image.load('octopus.png').convert_alpha()
+            self.hasCell = True
