@@ -10,9 +10,9 @@ class Octopus(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.ink_sprites = pygame.sprite.Group()
         self.all_sprites = pygame.sprite.Group()
-        self.image_orig = pygame.image.load("octopus.png").convert_alpha()
+        self.image_orig = pygame.image.load("octopus1.png").convert_alpha()
         # load octopus image and get its rect
-        self.image = pygame.image.load('octopus.png').convert_alpha()
+        self.image = pygame.image.load('octopus1.png').convert_alpha()
         self.image = self.image_orig.copy()
         image_size = self.image.get_size()
         self.rect = self.image.get_rect()
