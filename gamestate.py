@@ -254,9 +254,6 @@ class GameState:
 
             pygame.display.flip()
 
-    def end_game(self, screen):
-        level_background = background.Background(screen, "titleBackground.png")
-
     def state_manager(self, screen):
         if self.state == 'intro':
             self.intro(screen)
