@@ -69,7 +69,7 @@ class Enemy(pygame.sprite.Sprite):
         # If the enemy has been hit by all colors
         if len(self.hit_colors) >= len(bullet_colors):
             self.kill()
-            scoreboard.increment_score()
+            scoreboard.increment_score(888)
 
     def draw(self, screen):
         # draw octopus on screen
@@ -91,7 +91,8 @@ class Enemy(pygame.sprite.Sprite):
 
     def spawn_enemies(self, numEnemies, playerPosition):
         enemies = pygame.sprite.Group()
+        enemies = []
         for i in range(numEnemies):
             enemy = Enemy(playerPosition)
-            enemies.add(enemy)
+            enemies.append(enemy)
         return enemies

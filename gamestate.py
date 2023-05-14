@@ -34,8 +34,7 @@ class GameState:
                         pygame.quit()
                     if event.key == pygame.K_LEFT or event.key == ord(' '):
                         self.octopus.control(mouse_pos)
-                        octopus.control(mouse_pos)
-                        octopus.shoot_ink()
+                        self.octopus.shoot_ink()
                         # print('Move')
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if play_game_button.clicked(pygame.mouse.get_pos()):
@@ -89,8 +88,15 @@ class GameState:
         level_background = background.Background(screen, "starterBackground.png")
         first_portal = portal.Portal(screen)
         bullet_group = pygame.sprite.Group()
+        self.clock = pygame.time.Clock()
+        self.enemy_spawn_delay = 10000
+        self.spawn_timer = 0
+        self.spawn_rate = 2
+        enemies = pygame.sprite.Group()
         enemy = Enemy.Enemy(self.octopus.rect.center)
         enemy_group = enemy.spawn_enemies(10, self.octopus.rect.center)
+        for enemy in enemy_group:
+            enemies.add(enemy)
         # Create sprite group
         energy_cells = pygame.sprite.Group()
         # Create EnergyCell instance
@@ -108,7 +114,6 @@ class GameState:
                         pygame.quit()
                         return
                     if event.key == pygame.K_LEFT or event.key == ord(' '):
-                        self.octopus.control(pygame.mouse.get_pos())
                         self.octopus.control(pygame.mouse.get_pos())
                         self.octopus.shoot_ink()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -129,7 +134,15 @@ class GameState:
             # update the game state
             mouse_pos = pygame.mouse.get_pos()
             bullet_group.update()
-            enemy_group.update(self.octopus.rect.center, bullet_group, scoreboard)
+            self.spawn_timer += 10
+            if self.enemy_spawn_delay - self.spawn_timer < 1000:
+                enemy_group = enemy.spawn_enemies(self.spawn_rate, self.octopus.rect.center)
+                for enemy in enemy_group:
+                    enemies.add(enemy)
+                self.spawn_timer = 0
+                self.spawn_rate += 1
+
+            enemies.update(self.octopus.rect.center, bullet_group, scoreboard)
 
             self.octopus.update(mouse_pos)
             self.octopus.update(mouse_pos)
@@ -142,13 +155,15 @@ class GameState:
             level_background.draw(screen)
             self.octopus.draw(screen)
             bullet_group.draw(screen)
-            enemy_group.draw(screen)
+            enemies.draw(screen)
             scoreboard.draw(screen)
-
+            scoreboard.increment_score(0)
             energy_cells.update(self.octopus, energy_cells)
             energy_cells.draw(screen)
-
+            deathcollisions = pygame.sprite.spritecollide(self.octopus, enemies, True)
             collisions = pygame.sprite.spritecollide(self.octopus, energy_cells, True)
+            if deathcollisions:
+                break
             if collisions:
                 print("COLLIDING COLLIDING")
                 self.octopus.sethascell()

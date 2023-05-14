@@ -66,9 +66,10 @@ class Octopus(pygame.sprite.Sprite):
 
         self.angle = 90 + math.degrees(math.atan2(dy, dx))
 
-        deceleration = .995
-        self.movex *= deceleration if abs(self.movex) > .7 else 1
-        self.movey *= deceleration if abs(self.movey) > .7 else 1
+        deceleration = .90
+        self.movex *= deceleration if abs(self.movex) > .6 else 1
+        self.movey *= deceleration if abs(self.movey) > .6 else 1
+        print(self.movex)
 
         self.rect.centerx += self.movex
         self.rect.centery += self.movey
@@ -94,6 +95,8 @@ class Octopus(pygame.sprite.Sprite):
 
         for ink in self.all_sprites:
             ink.update()
+
+
 
 
     def shoot_ink(self):
