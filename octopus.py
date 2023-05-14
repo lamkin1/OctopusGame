@@ -25,6 +25,7 @@ class Octopus(pygame.sprite.Sprite):
         self.ink_cooldown = 0
         # set octopus position to center of screen
         self.rect.center = screen.get_rect().center
+        self.rect.centery = screen.get_rect().height - 350  # move the octopus 100 pixels from the bottom of the screen
         self.hasCell = False
 
     def getPosition(self):
