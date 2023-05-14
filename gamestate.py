@@ -154,11 +154,19 @@ class GameState:
                     enemies.add(enemy)
                 self.spawn_timer = 0
                 self.spawn_rate += 1
-
+            scoreboard.increment_score(1)
             enemies.update(self.octopus.rect.center, bullet_group, scoreboard)
+            collisions = pygame.sprite.spritecollide(self.octopus, enemy_group, False)
+            if collisions:
+                # Collision detected
+                # Switch game state or perform any necessary actions
+                # For example, set a game over state or end the game
 
+                # Example: Switching game state to "game_over"
+                self.state = 'main_game'
+                self.main_game(screen)
             self.octopus.update(mouse_pos)
-            self.octopus.update(mouse_pos)
+
 
             for bullet in bullet_group.sprites():
                 print(
@@ -183,8 +191,13 @@ class GameState:
             # first_portal.draw(screen)
             pygame.display.flip()
 
+    def end_game(self, screen):
+        level_background = background.Background(screen, "titleBackground.png")
+
     def state_manager(self, screen):
         if self.state == 'intro':
             self.intro(screen)
         if self.state == 'main_game':
             self.main_game(screen)
+        if self.state =='end_game':
+            self.end_game(screen)
