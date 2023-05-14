@@ -14,6 +14,11 @@ class Enemy(pygame.sprite.Sprite):
 
         self.image = self.image_orig.copy()
         self.rect = self.image.get_rect()
+        current_size = self.rect.size
+        new_size = (current_size[0] // 2, current_size[1] // 2)
+        self.image = pygame.transform.scale(self.image, new_size)
+        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect()
         self.rect.center = self.generate_random_position(player_position)
         self.angle = 45
         self.speed = 1
