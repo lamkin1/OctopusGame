@@ -35,6 +35,8 @@ class Octopus(pygame.sprite.Sprite):
         self.movex = 0
         self.movey = 0
         self.rect.center = screen.get_rect().center
+        self.rect.centery = screen.get_rect().height - 350  # move the octopus 100 pixels from the bottom of the screen
+
 
     def draw(self, screen):
         # draw octopus on screen

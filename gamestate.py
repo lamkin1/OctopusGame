@@ -100,7 +100,6 @@ class GameState:
     def endgame(self, screen):
         mouse_pos = pygame.mouse.get_pos()
         level_background = background.Background(screen, "EndgameBackground.png")
-        play_game_button = playgamebutton.PlayGameButton(screen)
         bullet_group = pygame.sprite.Group()
 
         check = True
@@ -118,12 +117,6 @@ class GameState:
                         propel_sound.play()
                         # print('Move')
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if play_game_button.clicked(pygame.mouse.get_pos()):
-                        self.octopus.reset(screen)
-                        self.state = 'main_game'
-                        self.main_game(screen)
-                        check = False
-                        break
 
                     # Get the direction vector between the mouse position and the player position
                     dx, dy = event.pos[0] - self.octopus.rect.centerx, event.pos[1] - self.octopus.rect.centery
@@ -159,7 +152,6 @@ class GameState:
             screen.fill((0, 0, 0))
             level_background.draw(screen)
             self.octopus.draw(screen)
-            play_game_button.draw(screen)
             bullet_group.update()
 
             for bullet in bullet_group.sprites():
@@ -180,7 +172,7 @@ class GameState:
         self.spawn_rate = 2
         enemies = pygame.sprite.Group()
         enemy = Enemy.Enemy(self.octopus.rect.center)
-        enemy_group = enemy.spawn_enemies(10, self.octopus.rect.center)
+        enemy_group = enemy.spawn_enemies(4, self.octopus.rect.center)
         for enemy in enemy_group:
             enemies.add(enemy)
         # Create sprite group
@@ -242,8 +234,9 @@ class GameState:
                 # For example, set a game over state or end the game
 
                 # Example: Switching game state to "game_over"
-                self.state = 'main_game'
-                self.main_game(screen)
+                self.state = 'end_game'
+                self.octopus.reset(screen)
+                self.endgame(screen)
             self.octopus.update(mouse_pos)
 
 
