@@ -7,6 +7,10 @@ import portal
 from octopus import Octopus
 from bullet import Bullet
 
+from energycell import EnergyCell
+class GameState:
+    def __init__(self):
+        self.state = 'intro'
 
 class GameState:
     def __init__(self, octopus):
@@ -17,7 +21,7 @@ class GameState:
 
     def intro(self, screen):
         mouse_pos = pygame.mouse.get_pos()
-        level_background = background.Background(screen, "raccoon.png")
+        level_background = background.Background(screen, "titleBackground.jpeg")
         play_game_button = playgamebutton.PlayGameButton(screen)
         bullet_group = pygame.sprite.Group()
         check = True
@@ -30,6 +34,8 @@ class GameState:
                         pygame.quit()
                     if event.key == pygame.K_LEFT or event.key == ord(' '):
                         self.octopus.control(mouse_pos)
+                        octopus.control(mouse_pos)
+                        octopus.shoot_ink()
                         # print('Move')
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if play_game_button.clicked(pygame.mouse.get_pos()):
@@ -85,6 +91,12 @@ class GameState:
         bullet_group = pygame.sprite.Group()
         enemy = Enemy.Enemy(self.octopus.rect.center)
         enemy_group = enemy.spawn_enemies(10, self.octopus.rect.center)
+        # Create sprite group
+        energy_cells = pygame.sprite.Group()
+        # Create EnergyCell instance
+        cell = EnergyCell(500, 500)
+        # Add EnergyCell instance to sprite group
+        energy_cells.add(cell)
 
         while True:
             for event in pygame.event.get():
@@ -97,6 +109,8 @@ class GameState:
                         return
                     if event.key == pygame.K_LEFT or event.key == ord(' '):
                         self.octopus.control(pygame.mouse.get_pos())
+                        self.octopus.control(pygame.mouse.get_pos())
+                        self.octopus.shoot_ink()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # Get the direction vector between the mouse position and the player position
                     dx, dy = event.pos[0] - self.octopus.rect.centerx, event.pos[1] - self.octopus.rect.centery
@@ -118,6 +132,8 @@ class GameState:
             enemy_group.update(self.octopus.rect.center, bullet_group)
 
             self.octopus.update(mouse_pos)
+            self.octopus.update(mouse_pos)
+
             for bullet in bullet_group.sprites():
                 print(f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
 
@@ -127,6 +143,17 @@ class GameState:
             self.octopus.draw(screen)
             bullet_group.draw(screen)
             enemy_group.draw(screen)
+
+
+            energy_cells.update(self.octopus, energy_cells)
+            energy_cells.draw(screen)
+
+            collisions = pygame.sprite.spritecollide(self.octopus, energy_cells, True)
+            if collisions:
+                print("COLLIDING COLLIDING")
+                self.octopus.sethascell()
+                self.octopus.flipSkin()
+
             first_portal.draw(screen)
             pygame.display.flip()
 
