@@ -50,11 +50,16 @@ class Octopus(pygame.sprite.Sprite):
 
     def update(self, mouse_pos):
         dx, dy = mouse_pos[0] - self.rect.centerx, mouse_pos[1] - self.rect.centery
+
         self.angle = 90 + math.degrees(math.atan2(dy, dx))
 
-        deceleration = .982
-        self.movex *= deceleration
-        self.movey *= deceleration
+        deceleration = .995
+        self.movex *= deceleration if abs(self.movex) > .7 else 1
+        self.movey *= deceleration if abs(self.movey) > .7 else 1
+
+        #print(self.movex)
 
         self.rect.centerx += self.movex
+        #print(self.rect.centerx)
         self.rect.centery += self.movey
+
