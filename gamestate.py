@@ -5,9 +5,15 @@ import playgamebutton
 import portal
 from bullet import Bullet
 
+
+
 class GameState:
     def __init__(self):
         self.state = 'intro'
+        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+        self.level_backgrounds = ["raccoon.png", "starterBackground.png"]
+        self.bullet_group = pygame.sprite.Group()
+
 
     def intro(self, screen, octopus):
         mouse_pos = pygame.mouse.get_pos()
@@ -36,7 +42,13 @@ class GameState:
                     direction = pygame.Vector2(dx, dy).normalize()
 
                     # Create a new bullet and add it to the group
-                    shots = Bullet(octopus.rect.center, direction, 10, octopus.rect)
+                    # Cycle to the next color
+                    color = next(self.color_iter, None)
+                    if color is None:  # If we've reached the end of the list, reset the iterator
+                        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+                        color = next(self.color_iter)
+
+                    shots = Bullet(octopus.rect.center, direction, 10, octopus.rect, color)
                     #print(
                     #    f"Bullet position: {shots.rect.center}, direction: {shots.direction}, speed: {shots.speed}")
 
@@ -62,6 +74,9 @@ class GameState:
         first_portal = portal.Portal(screen)
         bullet_group = pygame.sprite.Group()
 
+        # Define colors and iterator
+
+
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -77,22 +92,22 @@ class GameState:
                     # Get the direction vector between the mouse position and the player position
                     dx, dy = event.pos[0] - octopus.rect.centerx, event.pos[1] - octopus.rect.centery
                     direction = pygame.Vector2(dx, dy).normalize()
-                    # Create a new bullet and add it to the group
-                    shots = Bullet(octopus.rect.center, direction, 10, octopus.rect)
-                    bullet_group.add(shots)
-                    for bullet in bullet_group.sprites():
-                        print(
-                            f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
+
+                    # Cycle to the next color
+                    # Cycle to the next color
+                    color = next(self.color_iter, None)
+                    if color is None:  # If we've reached the end of the list, reset the iterator
+                        self.color_iter = iter([(255, 0, 0), (0, 255, 0), (0, 0, 255)])  # Red, Green, Blue
+                        color = next(self.color_iter)
+
+                    # Create a new bullet with the current color and add it to the group
+                    bullet = Bullet(octopus.rect.center, direction, 10, octopus.rect, color)
+                    bullet_group.add(bullet)
 
             # update the game state
             mouse_pos = pygame.mouse.get_pos()
-            bullet_group.update()
             octopus.update(mouse_pos)
-            for bullet in bullet_group.sprites():
-                print(f"Bullet position: {bullet.rect.center}, direction: {bullet.direction}, speed: {bullet.speed}")
-
             bullet_group.update()
-
 
             # draw the game objects on the screen
             screen.fill((0, 0, 0))
