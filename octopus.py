@@ -14,11 +14,14 @@ class Octopus(pygame.sprite.Sprite):
         self.movey = 0
         self.frame = 0
         self.angle = 0
-        self.maxMoveSpeed = 5
-        self.moveSpeed = 5
+        self.maxMoveSpeed = 2
+        self.moveSpeed = 2
 
         # set octopus position to center of screen
         self.rect.center = screen.get_rect().center
+
+    def getPosition(self):
+        return self.rect
 
     def reset(self, screen):
         self.movex = 0
