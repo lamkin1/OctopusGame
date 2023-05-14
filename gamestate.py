@@ -4,13 +4,13 @@ import bullet
 import playgamebutton
 import Enemy
 import portal
+import scoreboard
 from octopus import Octopus
 from bullet import Bullet
 
 from energycell import EnergyCell
-class GameState:
-    def __init__(self):
-        self.state = 'intro'
+
+scoreboard = scoreboard.ScoreBoard()
 
 class GameState:
     def __init__(self, octopus):
@@ -129,7 +129,7 @@ class GameState:
             # update the game state
             mouse_pos = pygame.mouse.get_pos()
             bullet_group.update()
-            enemy_group.update(self.octopus.rect.center, bullet_group)
+            enemy_group.update(self.octopus.rect.center, bullet_group, scoreboard)
 
             self.octopus.update(mouse_pos)
             self.octopus.update(mouse_pos)
@@ -143,7 +143,7 @@ class GameState:
             self.octopus.draw(screen)
             bullet_group.draw(screen)
             enemy_group.draw(screen)
-
+            scoreboard.draw(screen)
 
             energy_cells.update(self.octopus, energy_cells)
             energy_cells.draw(screen)
