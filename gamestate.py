@@ -76,9 +76,8 @@ class GameState:
 
                     bullet_group.add(shots)
 
-            if not check:
-                break
             # draw the background and octopus and portal on the screen            mouse_pos = pygame.mouse.get_pos()
+            mouse_pos = pygame.mouse.get_pos()
             self.octopus.update(mouse_pos)
             screen.fill((0, 0, 0))
             level_background.draw(screen)

@@ -20,7 +20,7 @@ class Octopus(pygame.sprite.Sprite):
         self.movey = 0
         self.frame = 0
         self.angle = 0
-        self.maxMoveSpeed = 2
+        self.maxMoveSpeed = 1
         self.moveSpeed = 1
         self.ink_cooldown = 0
         # set octopus position to center of screen
@@ -56,8 +56,8 @@ class Octopus(pygame.sprite.Sprite):
         movement_x = math.sin(self.angle * 0.0174533) * self.moveSpeed
         movement_y = math.cos(self.angle * 0.0174533) * self.moveSpeed * (-1)
 
-        self.movey += movement_y
-        self.movex += movement_x
+        self.movey += movement_y if (abs(self.movey) + movement_x)< 1 else (1-movement_x)
+        self.movex += movement_x if (abs(self.movex) + movement_x) < 1 else (1-movement_x)
         # print(f'movex: {self.movex} movey: {self.movey}')
         self.update(mouse_pos)
 
